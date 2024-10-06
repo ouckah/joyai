@@ -5,6 +5,7 @@ import { useState } from "react";
 import { USER, BOT } from "../../constants/senders";
 import { ScrollContainer } from "../_components/ScrollableContainer";
 import { Navbar } from "../_components/Navbar";
+import { sendMessage } from "../service/chat";
 
 export default function Home() {
   const [messages, setMessages] = useState([
@@ -31,7 +32,7 @@ export default function Home() {
   ]);
   const [inputValue, setInputValue] = useState("");
 
-  const handleSendMessage = (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return; // avoid empty messages
 
@@ -41,7 +42,21 @@ export default function Home() {
     };
 
     // update messages array
-    setMessages([...messages, newMessage]);
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+    try {
+      // Await the bot's response
+      const responseValue = await sendMessage(0, inputValue);
+
+      const newResponse = {
+        sender: BOT,
+        text: responseValue, 
+      };
+
+      setMessages((prevMessages) => [...prevMessages, newResponse]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
 
     // clear input field after sending message
     setInputValue("");
@@ -69,7 +84,7 @@ export default function Home() {
                         <div className="w-20 rounded-full">
                           <img
                             alt="JoyAI PFP"
-                            src="https://cdn.discordapp.com/attachments/1013767199493718027/1291960457762050058/images.png?ex=6701ff70&is=6700adf0&hm=841e0d99afc3cd8414f106d04f848656c0d5f3bac2c17e41873f8a81037efd48&"
+                            src="/image/joypfp.png"
                             className="object-cover"
                           />
                         </div>
