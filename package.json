@@ -13,14 +13,18 @@
     "@langchain/groq": "^0.1.2",
     "lucide-react": "^0.447.0",
     "@langchain/langgraph": "^0.2.11",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0",
     "next": "14.2.14",
+    "next-auth": "^4.24.8",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "daisyui": "^4.12.12",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
