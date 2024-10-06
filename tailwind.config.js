@@ -10,8 +10,13 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "joy-pink": "#FCF4F1",
+        "joy-pink-dark": "#FCE5CD",
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"), require("tailwind-scrollbar-hide")],
+  daisyui: {
+    themes: ["autumn"],
+  },
 };
