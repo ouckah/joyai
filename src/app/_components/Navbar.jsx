@@ -13,7 +13,7 @@ export const Navbar = ({ }) => {
             </Link>
             <Link 
                 className='flex justify-center items-center w-14 h-14 rounded-full hover:brightness-75 hover:bg-joy-pink-dark hover:shadow-inner duration-300 transition-all' 
-                href='chat'
+                href='calendar'
             >
                 <CalendarHeart size={35} color='#826a5c' />
             </Link>
