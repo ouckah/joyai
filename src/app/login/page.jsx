@@ -22,7 +22,7 @@ export default function Login() {
     }
     if (res?.ok) {
       console.log('logged in');
-      return router.push("/");
+      return router.push("/chat");
     }
     
   };
