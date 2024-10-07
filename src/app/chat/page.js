@@ -10,30 +10,66 @@ import { sendMessage } from "../service/chat";
 export default function Home() {
   const [messages, setMessages] = useState([
     {
-      sender: USER,
-      text: "Hello.",
-    },
-    {
       sender: BOT,
-      text: "Hello user! How are you?",
-    },
-    {
-      sender: USER,
-      text: "I've been aight.",
-    },
-    {
-      sender: BOT,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
-    {
-      sender: USER,
-      text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-    },
+      text: "Hello, I am Joy AI. How can I help you today?",
+    }
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+
+  const typeMessage = (message, setMessages, sender) => {
+    let index = -1;
+    const typingSpeed = 30; 
+   
+  
+    function typeNextCharacter() {
+      setMessages(prevMessages => {
+        const lastMessage = prevMessages[prevMessages.length - 1];
+  
+        const updatedMessage = lastMessage?.text !== undefined
+          ? lastMessage.text + message[index]
+          : message[index];
+  
+        const newMessages = [...prevMessages];
+        newMessages[newMessages.length - 1] = {
+          ...lastMessage,
+          text: updatedMessage,
+        };
+  
+        return newMessages;
+      });
+  
+      index++;
+  
+      if (index < message.length-1) {
+        setTimeout(typeNextCharacter, typingSpeed);
+      }
+      else {
+        setLoading(false);
+      }
+    }
+  
+    // Add a new empty message from the bot
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { sender, text: '' }
+    ]);
+  
+    typeNextCharacter();
+  };
+  
+  
 
   const handleSendMessage = async (e) => {
+    
     e.preventDefault();
+
+    // avoid sending message while bot is typing
+    if (loading) {
+      return;
+    }
     if (!inputValue.trim()) return; // avoid empty messages
 
     const newMessage = {
@@ -44,22 +80,23 @@ export default function Home() {
     // update messages array
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
+    setLoading(true);
+
     try {
-      // Await the bot's response
-      const responseValue = await sendMessage(0, inputValue);
+      const response = await sendMessage(0, inputValue); // userId is 0 for now
 
-      const newResponse = {
-        sender: BOT,
-        text: responseValue, 
-      };
+      typeMessage(response, setMessages, 'bot');
 
-      setMessages((prevMessages) => [...prevMessages, newResponse]);
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error fetching chat completion:", error);
+      setMessages(prevMessages => [
+        ...prevMessages,
+        { sender: 'bot', text: 'Error: Unable to fetch response.' }
+      ]);
+    } finally {
+      setInputValue(''); 
+       
     }
-
-    // clear input field after sending message
-    setInputValue("");
   };
 
   return (
