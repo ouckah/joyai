@@ -17,17 +17,17 @@ let moodData = [
 const getMoodColor = (mood) => {
   switch (mood) {
     case BAD:
-      return "bg-red-500"; // Red for BAD mood
+      return "bg-red-300";
     case MEH:
-      return "bg-yellow-500"; // Yellow for MEH mood
+      return "bg-red-200";
     case NEUTRAL:
-      return "bg-gray-500"; // Gray for NEUTRAL mood
+      return "bg-green-100";
     case OKAY:
-      return "bg-blue-500"; // Blue for OKAY mood
+      return "bg-green-200";
     case GOOD:
-      return "bg-green-500"; // Green for GOOD mood
+      return "bg-green-300";
     default:
-      return "bg-white"; // Default color if no mood is set
+      return "bg-white"; // default color if no mood is set
   }
 };
 
